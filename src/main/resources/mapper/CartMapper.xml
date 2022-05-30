@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hyh.cstore.mapper.CartMapper">
+    <resultMap id="CartMap" type="com.hyh.cstore.entity.Cart">
+        <id column="cid" property="cid"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+    <insert id="insertCart" useGeneratedKeys="true" keyProperty="cid">
+        INSERT INTO store.t_cart(uid, pid, price, num, created_user, created_time, modified_user, modified_time)
+        VALUES (#{uid}, #{pid}, #{price}, #{num}, #{createdUser}, #{createdTime}, #{modifiedUser}, #{modifiedTime})
+    </insert>
+    <update id="updateNumByCid">
+        UPDATE store.t_cart SET num=#{num},modified_user=#{modifiedUser},modified_time=#{modifiedTime} WHERE cid=#{cid}
+    </update>
+    <select id="findByUidAndPid" resultMap="CartMap">
+        SELECT * FROM store.t_cart WHERE uid=#{uid} AND pid=#{pid}
+    </select>
+
+    <select id="findCartListByUid" resultType="com.hyh.cstore.vo.CartVO">
+        SELECT store.t_cart.uid, store.t_cart.pid, store.t_cart.cid, store.t_product.image,store.t_product.title, store.t_cart.price, store.t_cart.num, store.t_product.price AS realPrice
+        FROM store.t_cart, store.t_product
+        WHERE store.t_product.id = store.t_cart.pid AND uid=#{uid}
+        ORDER BY store.t_cart.created_time DESC
+    </select>
+    <select id="findByCid" resultMap="CartMap">
+        SELECT * FROM store.t_cart WHERE cid=#{cid}
+    </select>
+    <select id="findCartListByCid" resultType="com.hyh.cstore.vo.CartVO">
+        SELECT store.t_cart.uid, store.t_cart.pid, store.t_cart.cid, store.t_product.image,store.t_product.title, store.t_cart.price, store.t_cart.num, store.t_product.price AS realPrice
+        FROM store.t_cart, store.t_product
+        WHERE store.t_product.id = store.t_cart.pid AND cid IN (
+            <foreach collection="array" item="cid" separator=",">
+        #{cid}
+    </foreach> )
+        ORDER BY store.t_cart.created_time DESC
+    </select>
+</mapper>
