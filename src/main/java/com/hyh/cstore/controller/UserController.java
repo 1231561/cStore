@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 public class UserController extends BaseController{
     @Autowired
     IUserService service;
@@ -31,7 +31,7 @@ public class UserController extends BaseController{
      * @param user （约定大于配置）将实体类User类型作为参数，springboot会将前端的url地址中的参数名和实体类的属性名进行比较，比较结果相同的实体类属性被注入参数值
      * @return 返回给前端的结果集
      */
-    @RequestMapping("reg")
+    @RequestMapping("/reg")
     public JsonResult<Void> reg(User user){
         service.reg(user);
         return new JsonResult<>(OK);
@@ -42,7 +42,7 @@ public class UserController extends BaseController{
      *参数为非实体类，springboot将url的参数名和方法参数名进行比较，相同名字的参数被注入值
      * @return 返回给前端的结果集
      */
-    @RequestMapping("login")
+    @RequestMapping("/login")
     //泛型设置为User，表示data为user对象数据，返回JsonResult的实例给前端，包含状态码和user对象，和状态信息。
     public JsonResult<User> login(String username, String password, HttpSession session){
         User user = service.login(username, password);
@@ -61,7 +61,7 @@ public class UserController extends BaseController{
      * @param session 通过会话获取修改密码人的信息
      * @return 给前端返回结果集
      */
-    @RequestMapping("change_password")
+    @RequestMapping("/change_password")
     public JsonResult<Void> changePassword(String oldPassword, String newPassword, HttpSession session){
         Integer uid = getUidFromSession(session);
         String username = getUsernameFromSession(session);
@@ -74,7 +74,7 @@ public class UserController extends BaseController{
      * @param session
      * @return
      */
-    @RequestMapping("get_by_id")
+    @RequestMapping("/get_by_id")
     public JsonResult<User> getInfoByUid(HttpSession session){
         Integer uid = getUidFromSession(session);
         User res = service.findUserByUid(uid);
@@ -96,7 +96,7 @@ public class UserController extends BaseController{
     }
     public static final int MAX_SIZE = 10*1024*1024;
     public static final List<String> AVATAR_TYPE = new ArrayList<>();
-    @RequestMapping("update_avatar")
+    @RequestMapping("/update_avatar")
     public JsonResult<String> updateAvatar(HttpSession session, MultipartFile file){
         AVATAR_TYPE.add("image/jpeg");
         AVATAR_TYPE.add("image/png");
