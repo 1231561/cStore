@@ -41,10 +41,21 @@ public class CartController extends BaseController{
         Integer num= cartService.addNumber(cid, getUidFromSession(session), getUsernameFromSession(session));
         return new JsonResult<>(OK,num);
     }
+    @RequestMapping("{cid}/num/reduce")
+    public JsonResult<Integer> reduceNum(HttpSession session,
+                                      @PathVariable("cid") Integer cid){
+        Integer num= cartService.reduceNumber(cid, getUidFromSession(session), getUsernameFromSession(session));
+        return new JsonResult<>(OK,num);
+    }
 
     @RequestMapping("show_order")
     public JsonResult<List<CartVO>> showCartListByCid(HttpSession session, Integer[] cids){
         List<CartVO> list = cartService.showCartListByCid(cids, getUidFromSession(session));
         return new JsonResult<>(OK,list);
+    }
+    @RequestMapping("delete")
+    public JsonResult<Void> addToCart(HttpSession session, Integer cid){
+        cartService.deleteByCid(getUidFromSession(session), cid);
+        return new JsonResult<>(OK);
     }
 }

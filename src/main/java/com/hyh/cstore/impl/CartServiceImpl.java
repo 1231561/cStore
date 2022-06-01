@@ -3,10 +3,7 @@ package com.hyh.cstore.impl;
 import com.hyh.cstore.ICartService;
 import com.hyh.cstore.entity.Cart;
 import com.hyh.cstore.entity.Product;
-import com.hyh.cstore.ex.AccessDeniedException;
-import com.hyh.cstore.ex.CartNotFoundException;
-import com.hyh.cstore.ex.InsertException;
-import com.hyh.cstore.ex.UpdateException;
+import com.hyh.cstore.ex.*;
 import com.hyh.cstore.mapper.CartMapper;
 import com.hyh.cstore.mapper.ProductMapper;
 import com.hyh.cstore.vo.CartVO;
@@ -85,5 +82,37 @@ public class CartServiceImpl implements ICartService {
             }
         }
         return list;
+    }
+
+    @Override
+    public void deleteByCid(Integer uid, Integer cid) {
+        Cart cart = cartMapper.findByCid(cid);
+        if(cart == null){
+            throw new CartNotFoundException("改购物车记录为空");
+        }
+        if (!cart.getUid().equals(uid)){
+            throw new AccessDeniedException("非法操作");
+        }
+        Integer integer = cartMapper.deleteByCid(cid);
+        if(integer != 1){
+            throw new DeleteException("删除失败");
+        }
+    }
+
+    @Override
+    public Integer reduceNumber(Integer cid, Integer uid, String username) {
+        Cart cart = cartMapper.findByCid(cid);
+        if (cart == null){
+            throw  new CartNotFoundException("当前购物车记录不存在");
+        }
+        if(!cart.getUid().equals(uid)){
+            throw new AccessDeniedException("非法访问的数据");
+        }
+        Integer num = cart.getNum() - 1;
+        Integer integer = cartMapper.updateNumByCid(num, cid, username, new Date());
+        if(integer != 1){
+            throw new UpdateException("删除商品失败");
+        }
+        return num;
     }
 }

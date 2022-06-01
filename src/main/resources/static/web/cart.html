@@ -96,7 +96,7 @@
 						<p class="panel-title"><span class="fa fa-shopping-cart"></span> 购物车</p>
 					</div>
 					<div class="panel-body">
-						<form action="orderConfirm.html" role="form">
+						<form action="orderConfirm.html" role="form" hidden="">
 							<!--购物车表格开始-->
 							<table class="cart-table" width="100%">
 								<thead>
@@ -294,13 +294,13 @@
 							'<td>#{title}#{msg}</td>\n' +
 							'<td>¥<span id="price-#{cid}">#{priceOne}</span></td>\n' +
 							'<td>\n' +
-							'<input type="button" value="-" class="num-btn" onclick="reduceNum(1)" />\n' +
+							'<input type="button" value="-" class="num-btn" onclick="reduceNum(#{cid})" />\n' +
 							'<input id="num-#{cid}" type="text" size="2" readonly="readonly" class="num-text" value="#{num}">\n' +
 							'<input class="num-btn" type="button" value="+" onclick="addNum(#{cid})" />\n' +
 							'</td>\n' +
 							'<td>￥<span id="total-prince-#{cid}">#{totalPrice}</span></td>\n' +
 							'<td>\n' +
-							'<input type="button" onclick="delCartItem(this)" class="cart-del btn btn-default btn-xs" value="删除" />\n' +
+							'<input type="button" onclick="delCartItem(#{cid})" class="cart-del btn btn-default btn-xs" value="删除" />\n' +
 							'</td>\n' +
 							'</tr>'
 
@@ -313,10 +313,47 @@
 							list = list.replace("#{totalPrice}", data[i].num * data[i].price);
 							$("#cart-list").append(list);
 						}
-
 					},
 					error: function (xhr){
 						alert("购物车加载失败");
+					}
+				});
+			}
+			function delCartItem(cid){
+				$.ajax({
+					url: "/carts/delete?cid="+cid,
+					type: "POST",
+					dataType: "JSON",
+					success: function (json){
+						if (json.state == 200){
+							alert("删除成功")
+							location.href = "cart.html";
+						}else {
+							alert("删除购物车记录失败");
+						}
+					},
+					error: function (xhr){
+						alert("删除购物车记录时发生未知错误");
+					}
+				});
+			}
+			function reduceNum(cid){
+				$.ajax({
+					url: "/carts/"+cid+"/num/reduce",
+					type: "POST",
+					dataType: "JSON",
+					success: function (json){
+						if (json.state == 200){
+							$("#num-"+cid).val(json.data);
+							let price = $("#price-"+cid).html();
+							let total = price * json.data;
+							$("#total-prince-"+cid).html(total);
+						}else {
+							alert("减少商品数量失败");
+						}
+					},
+					error: function (xhr){
+						alert("减少商品时发生未知错误");
 					}
 				});
 			}
@@ -332,11 +369,11 @@
 							let total = price * json.data;
 							$("#total-prince-"+cid).html(total);
 						}else {
-							alert("增加商品数量失败");
+							alert("增加商品时发生未知错误");
 						}
 					},
 					error: function (xhr){
-						alert("购物车加载失败");
+						alert("增加商品时遇到未知错误");
 					}
 				});
 			}

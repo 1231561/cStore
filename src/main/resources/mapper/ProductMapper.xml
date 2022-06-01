@@ -16,9 +16,7 @@
 
     <!-- 查询热销商品的前四名：List<Product> findHostList() -->
     <select id="findHotList" resultMap="ProductMap">
-        SELECT
-            *
-        FROM
+        SELECT * FROM
             store.t_product
         WHERE
             status=1

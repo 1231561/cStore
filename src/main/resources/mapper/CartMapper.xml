@@ -38,4 +38,7 @@
     </foreach> )
         ORDER BY store.t_cart.created_time DESC
     </select>
+    <delete id="deleteByCid">
+        DELETE FROM store.t_cart WHERE cid=#{cid}
+    </delete>
 </mapper>

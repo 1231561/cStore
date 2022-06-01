@@ -1,5 +1,6 @@
 package com.hyh.cstore;
 
+import com.hyh.cstore.entity.OrderItem;
 import com.hyh.cstore.vo.CartVO;
 
 import java.util.List;
@@ -20,4 +21,10 @@ public interface ICartService {
     Integer addNumber(Integer cid, Integer uid, String username);
 
     List<CartVO> showCartListByCid(Integer[] cids, Integer uid);
+
+
+    void deleteByCid(Integer uid, Integer cid);
+
+    Integer reduceNumber(Integer cid, Integer uid, String username);
+
 }

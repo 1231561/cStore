@@ -3,6 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hyh.cstore.mapper.OrderMapper">
+    <resultMap id="orderVOMap" type="com.hyh.cstore.vo.OrderVO">
+        <id property="id" column="id"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="order_time" property="orderTime"/>
+        <result column="recv_name" property="recvName"/>
+    </resultMap>
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="oid">
     INSERT INTO store.t_order (
     uid, recv_name, recv_phone, recv_province, recv_city, recv_area, recv_address, total_price, status, order_time, pay_time, created_user, created_time, modified_user, modified_time )
@@ -21,4 +27,16 @@
                   #{createdTime}, #{modifiedUser}, #{modifiedTime}
                  )
     </insert>
+
+    <select id="findOrderItemByUid" resultMap="orderVOMap">
+        SELECT t_order_item.image, t_order_item.title, t_order_item.price, t_order_item.num, t_order.total_price, t_order.oid, id, t_order.order_time, recv_name
+        FROM store.t_order_item, store.t_order WHERE t_order.oid= t_order_item.oid AND uid=#{uid}
+        ORDER BY t_order.created_time
+    </select>
+    <delete id="deleteOrderById">
+        DELETE FROM store.t_order_item WHERE id=#{id}
+    </delete>
+    <select id="findOrderItemById" resultType="com.hyh.cstore.entity.OrderItem">
+        SELECT * FROM store.t_order_item WHERE id=#{id}
+    </select>
 </mapper>

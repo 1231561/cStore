@@ -31,6 +31,8 @@ public class BaseController {
             result.setState(4007);
         }else if(e instanceof CartNotFoundException){
             result.setState(4008);
+        }else if(e instanceof OrderItemNotFoundException){
+            result.setState(4009);
         }else if(e instanceof InsertException){
             result.setState(5000);
         }else if(e instanceof DeleteException){

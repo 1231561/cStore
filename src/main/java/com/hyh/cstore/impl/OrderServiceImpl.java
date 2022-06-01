@@ -6,12 +6,16 @@ import com.hyh.cstore.IOrderService;
 import com.hyh.cstore.entity.Address;
 import com.hyh.cstore.entity.Order;
 import com.hyh.cstore.entity.OrderItem;
+import com.hyh.cstore.ex.DeleteException;
 import com.hyh.cstore.ex.InsertException;
+import com.hyh.cstore.ex.OrderItemNotFoundException;
 import com.hyh.cstore.mapper.OrderMapper;
 import com.hyh.cstore.vo.CartVO;
+import com.hyh.cstore.vo.OrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -43,6 +47,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setTotalPrice(totalPrice);
         order.setStatus(0);
         order.setCreatedUser(username);
+        order.setCreatedTime(new Date());
         order.setModifiedUser(username);
         Integer integer = orderMapper.insertOrder(order);
         if(integer != 1){
@@ -66,5 +71,23 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
         return order;
+    }
+
+    @Override
+    public List<OrderVO> showOrderItem(Integer uid) {
+        List<OrderVO> orders = orderMapper.findOrderItemByUid(uid);
+        return orders;
+    }
+
+    @Override
+    public void deleteOrderItemById(Integer id) {
+        OrderItem orderItem = orderMapper.findOrderItemById(id);
+        if(orderItem == null){
+            throw new OrderItemNotFoundException("该订单项不存在");
+        }
+        Integer integer = orderMapper.deleteOrderById(id);
+        if(integer != 1){
+            throw new DeleteException("删除失败");
+        }
     }
 }

@@ -324,6 +324,95 @@
 			</div>
 		</footer>
 		<!--页脚结束-->
+	<script type="text/javascript">
+		$(document).ready(function (){
+			$(".col-md-10").empty();
+			showCartList();
+		})
+		function showCartList(){
+			$.ajax({
+				url: "/orders/show",
+				type: "POST",
+				dataType: "JSON",
+				success: function (json){
+					let list = json.data;
+					for (let i = 0; i < list.length; i++){
+						let div = '<div class="panel panel-default">\n' +
+								'<div class="panel-heading">\n' +
+								'<p class="panel-title">\n' +
+								'订单号：#{oid}，下单时间：#{time} ，收货人：#{name}\n' +
+								'</p>\n' +
+								'</div>\n' +
+								'<div class="panel-body">\n' +
+								'<table class="orders-table" width="100%">\n' +
+								'<thead>\n' +
+								'<tr>\n' +
+								'<th width="15%"></th>\n' +
+								'<th width="30%">商品</th>\n' +
+								'<th width="8%">单价</th>\n' +
+								'<th width="8%">数量</th>\n' +
+								'<th width="9%">小计</th>\n' +
+								'<th width="10%">售后</th>\n' +
+								'<th width="10%">状态</th>\n' +
+								'<th width="10%">操作</th>\n' +
+								'</tr>\n' +
+								'</thead>\n' +
+								'<tbody class="orders-body">\n' +
+								'<tr>\n' +
+								'<td><img src="#{image}collect.png" class="img-responsive" /></td>\n' +
+								'<td>#{title}</td>\n' +
+								'<td>¥<span>#{price}</span></td>\n' +
+								'<td>#{num}件</td>\n' +
+								'<td>¥<span>#{total}</span></td>\n' +
+								'<td><a href="#">申请售后</a></td>\n' +
+								'<td>\n' +
+								'<div>已发货</div>\n' +
+								'<div><a href="orderInfo.html">订单详情</a></div>\n' +
+								'</td>\n' +
+								'<td><input type="button" onclick="deleteOrderItem(#{id})" class="btn btn-default btn-xs" value="确认收货"/></td>\n' +
+								'</tr>\n' +
+								'</tbody>\n' +
+								'</table>\n' +
+								'<div>\n' +
+								'</div>\n' +
+								'</div>\n' +
+								'</div>'
+						div = div.replace("#{oid}",list[i].oid)
+						div = div.replace("#{name}",list[i].recvName)
+						div = div.replace("#{time}",list[i].orderTime)
+						div = div.replace("#{title}",list[i].title)
+						div = div.replace("#{price}",list[i].price)
+						div = div.replace("#{total}",list[i].price * list[i].num)
+						div = div.replace("#{image}",list[i].image)
+						div = div.replace("#{num}",list[i].num)
+						div = div.replace("#{id}",list[i].id)
+						$(".col-md-10").append(div)
+					}
+				},
+				error: function (xhr){
+					alert("订单加载失败");
+				}
+			});
+		}
+		function deleteOrderItem(id){
+			$.ajax({
+				url: "/orders/delete?id="+id,
+				type: "GET",
+				dataType: "JSON",
+				success: function (json){
+					if (json.state == 200){
+						alert("确认收货成功");
+						location.href="orders.html";
+					}else {
+						alert("确认收货失败");
+					}
+				},
+				error: function (xhr){
+					alert("确认收货时出现未知的错误");
+				}
+			});
+		}
+	</script>
 	</body>
 
 </html>
