@@ -1,6 +1,8 @@
 package com.hyh.cstore.controller;
 
 import com.hyh.cstore.ICartService;
+import com.hyh.cstore.IProductService;
+import com.hyh.cstore.entity.Product;
 import com.hyh.cstore.util.JsonResult;
 import com.hyh.cstore.vo.CartVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,8 @@ import java.util.List;
 public class CartController extends BaseController{
     @Autowired
     ICartService cartService;
-
+    @Autowired
+    IProductService productService;
     /**
      * 增加商品数量
      * @param session 会话
@@ -49,7 +52,7 @@ public class CartController extends BaseController{
     }
 
     @RequestMapping("show_order")
-    public JsonResult<List<CartVO>> showCartListByCid(HttpSession session, Integer[] cids){
+    public JsonResult<List<CartVO>> showCartListByCid(HttpSession session, Integer[] cids, Integer pid){
         List<CartVO> list = cartService.showCartListByCid(cids, getUidFromSession(session));
         return new JsonResult<>(OK,list);
     }
@@ -57,5 +60,11 @@ public class CartController extends BaseController{
     public JsonResult<Void> addToCart(HttpSession session, Integer cid){
         cartService.deleteByCid(getUidFromSession(session), cid);
         return new JsonResult<>(OK);
+    }
+
+    @RequestMapping("show_order_buy_new")
+    public JsonResult<Product> showOrder(Integer pid){
+        Product product = productService.findById(pid);
+        return new JsonResult<>(OK,product);
     }
 }

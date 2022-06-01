@@ -19,7 +19,7 @@ public class OrderServiceTest {
             Integer[] cids = {3, 4};
             Integer uid = 4;
             String username = "订单管理员";
-            Order order = orderService.CreateOrder(uid, cids, aid, username);
+            Order order = orderService.CreateOrder(uid, cids, aid, username,1);
             System.out.println(order);
         } catch (ServiceException e) {
             System.out.println(e.getClass().getSimpleName());

@@ -306,7 +306,35 @@
 					$("#all-price").html(allPrice);
 				},
 				error: function (xhr){
-					alert("购物车加载失败");
+					showOrder();
+				}
+			});
+		}
+		function showOrder(){
+			$("#cart-list").empty();
+			$.ajax({
+				url: "/carts/show_order_buy_new",
+				type: "POST",
+				data: location.search.substr(1),
+				dataType: "JSON",
+				success: function (json){
+					let data = json.data;
+					let tr = '<tr>\n' +
+							'<td><img src="..#{image}collect.png" class="img-responsive" /></td>\n' +
+							'<td>#{title}</td>\n' +
+							'<td>¥<span>#{price}</span></td>\n' +
+							'<td>#{num}</td>\n' +
+							'<td><span>#{total}</span></td>\n' +
+							'</tr>'
+					tr = tr.replace("#{image}",data.image);
+					tr = tr.replace("#{title}",data.title);
+					tr = tr.replace("#{price}",data.price);
+					tr = tr.replace("#{num}",1);
+					tr = tr.replace("#{total}",data.price);
+					$("#cart-list").append(tr);
+				},
+				error: function (xhr){
+					alert("订单加载失败");
 				}
 			});
 		}

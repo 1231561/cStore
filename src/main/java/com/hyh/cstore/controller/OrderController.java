@@ -18,10 +18,10 @@ public class OrderController extends BaseController{
     @Autowired
     IOrderService orderService;
     @RequestMapping("create_order")
-    public JsonResult<Order> createOrder(HttpSession session, Integer[] cids, Integer aid){
+    public JsonResult<Order> createOrder(HttpSession session, Integer[] cids, Integer aid, Integer pid){
         Integer uid = getUidFromSession(session);
         String username = getUsernameFromSession(session);
-        Order order = orderService.CreateOrder(uid, cids, aid, username);
+        Order order = orderService.CreateOrder(uid, cids, aid, username,pid);
         return new JsonResult<>(OK, order);
     }
     @RequestMapping("show")
@@ -31,7 +31,7 @@ public class OrderController extends BaseController{
         return new JsonResult<>(OK,list);
     }
     @RequestMapping("delete")
-    public JsonResult<Void> showOrderItems(Integer id){
+    public JsonResult<Void> deleteOrderItems(Integer id){
         orderService.deleteOrderItemById(id);
         return new JsonResult<>(OK);
     }
