@@ -98,7 +98,7 @@
 				<div class="panel-body">
 					<form action="orderConfirm.html" role="form">
 						<!--购物车表格开始-->
-						<table class="cart-table" width="100%">
+						<table class="cart-table" width="100%" id="goodsTable">
 							<thead>
 							<tr>
 								<th width="8%">
@@ -287,23 +287,22 @@
 					success: function (json){
 						let data = json.data;
 						for (let i = 0; i < data.length; i++){
-							let list = '<tr>\n' +
-							'<td>\n' +
-							'<input name="cids" value="#{cid}" type="checkbox" class="ckitem" />\n' +
-							'</td>\n' +
-							'<td><img src="..#{image}collect.png" class="img-responsive" /></td>\n' +
-							'<td>#{title}#{msg}</td>\n' +
-							'<td>¥<span id="price-#{cid}">#{priceOne}</span></td>\n' +
-							'<td>\n' +
-							'<input type="button" value="-" class="num-btn" onclick="reduceNum(#{cid})" />\n' +
-							'<input id="num-#{cid}" type="text" size="2" readonly="readonly" class="num-text" value="#{num}">\n' +
-							'<input class="num-btn" type="button" value="+" onclick="addNum(#{cid})" />\n' +
-							'</td>\n' +
-							'<td>￥<span id="total-prince-#{cid}">#{totalPrice}</span></td>\n' +
-							'<td>\n' +
-							'<input type="button" onclick="delCartItem(#{cid})" class="cart-del btn btn-default btn-xs" value="删除" />\n' +
-							'</td>\n' +
-							'</tr>';
+							let list =
+									'<tr>\n' +
+										'<td>\n' +
+											'<input name="cids" value="#{cid}" type="checkbox" class="ckitem"/>\n' +
+										'</td>\n' +
+										'<td><img src="..#{image}collect.png" class="img-responsive" /></td>\n' +
+										'<td>#{title}#{msg}</td>\n' +
+										'<td>¥<span id="price-#{cid}">#{priceOne}</span></td>\n' +
+										'<td>\n' +
+
+										'</td>\n' +
+										'<td>￥<span id="total-prince-#{cid}">#{totalPrice}</span></td>\n' +
+										'<td>\n' +
+										'<input type="button" onclick="delCartItem(#{cid})" class="cart-del btn btn-default btn-xs" value="删除" />\n' +
+										'</td>\n' +
+									'</tr>';
 
 							list = list.replaceAll( "#{cid}", data[i].cid);
 							list = list.replace("#{image}", data[i].image);
@@ -314,6 +313,26 @@
 							list = list.replace("#{totalPrice}", data[i].num * data[i].price);
 							$("#cart-list").append(list);
 						}
+						var allTr = document.getElementById("goodsTable").children[1].children;
+						var selectTotal = document.getElementById("selectTotal");
+
+						var count = document.getElementById("selectCount");
+
+						$("input[type=checkbox]").click(function (){
+							let tempCount = 0;
+							let tempTotalPrice = 0;
+							for(let i = 0;i < allTr.length;i++){
+								console.log(allTr[i].children[0].children[0]);
+								console.log(allTr[i].children[5].children[0]);
+								if(allTr[i].children[0].children[0].checked){
+									tempCount++;
+									tempTotalPrice += parseFloat(allTr[i].children[5].children[0].innerText);
+								}
+							}
+							selectTotal.innerText = tempTotalPrice.toString();
+							count.innerText = tempCount.toString();
+						});
+
 					},
 					error: function (xhr){
 						alert("购物车加载失败");
