@@ -251,6 +251,7 @@
 		<!--页脚结束-->
 	<script type="text/javascript">
 		$(document).ready(function (){
+			showOrder();
 			showCartList();
 			showAddressList();
 		});
@@ -306,7 +307,7 @@
 					$("#all-price").html(allPrice);
 				},
 				error: function (xhr){
-					showOrder();
+					alert("订单加载失败");
 				}
 			});
 		}
