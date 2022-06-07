@@ -4,6 +4,7 @@ import com.hyh.cstore.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -28,7 +29,14 @@ public class LoginInterceptorConfig implements WebMvcConfigurer {
                         "/users/login",
                         "/users/reg",
                         "/districts/**",
-                        "/products/**"
+                        "/products/**",
+                        "/upload/**"
                         );
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/upload/**").
+                addResourceLocations("file:D:/cStore/src/main/resources/static/upload/");
     }
 }

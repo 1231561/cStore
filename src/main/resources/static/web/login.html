@@ -152,7 +152,7 @@
 					dataType: "JSON",
 					success: function (json) {
 						if(json.state == 200){
-							$.cookie("avatar", json.data,{expires: 7})
+							$.cookie("avatar", json.data.avatar,{expires: 7})
 							alert("登录成功")
 							//跳转到首页
 							location.href = "index.html"

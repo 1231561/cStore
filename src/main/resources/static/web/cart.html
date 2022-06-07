@@ -14,6 +14,7 @@
 		<link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<script src="../bootstrap3/jquery-1.9.1.min.js"></script>
 		<script src="../bootstrap3/js/bootstrap.js"></script>
+		<script src="../js/common.js"></script>
 		<!-- 字体图标 -->
 		<link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -57,7 +58,7 @@
 						</div>
 					</li>
 					<li class="li-split">|</li>
-					<li><a href="login.html"><span class="fa fa-user"></span>&nbsp;登录</a></li>
+					<li><a id="login-user" href="login.html"><span class="fa fa-user"></span>&nbsp;登录</a></li>
 				</ul>
 			</div>
 		</div>
@@ -102,7 +103,7 @@
 							<thead>
 							<tr>
 								<th width="8%">
-									<input type="checkbox" class="ckall" onclick="checkall(this)" />全选</th>
+									<input type="checkbox" class="ckall" onclick="checkall()" />全选</th>
 								<th width="110"></th>
 								<th width="29%">商品</th>
 								<th width="11%">单价</th>
@@ -126,7 +127,7 @@
 								</td>
 								<td><span id="goodsCast1"></span></td>
 								<td>
-									<input type="button" onclick="delCartItem(this)" class="cart-del btn btn-default btn-xs" value="删除" />
+									<input type="button" onclick="delCartItem()" class="cart-del btn btn-default btn-xs" value="删除" />
 								</td>
 							</tr>
 							<tr>
@@ -322,8 +323,8 @@
 							let tempCount = 0;
 							let tempTotalPrice = 0;
 							for(let i = 0;i < allTr.length;i++){
-								console.log(allTr[i].children[0].children[0]);
-								console.log(allTr[i].children[5].children[0]);
+								// console.log(allTr[i].children[0].children[0]);
+								// console.log(allTr[i].children[5].children[0]);
 								if(allTr[i].children[0].children[0].checked){
 									tempCount++;
 									tempTotalPrice += parseFloat(allTr[i].children[5].children[0].innerText);
@@ -338,6 +339,21 @@
 						alert("购物车加载失败");
 					}
 				});
+			}
+			function checkall(){
+				let allTr = document.getElementById("goodsTable").children[1].children;
+				let checkAll = document.getElementById("goodsTable").children[0].children[0].children[0].children[0];
+				console.log(checkAll)
+				console.log(checkAll.checked)
+				if(checkAll.checked){
+					for(let i = 0; i < allTr.length; i++){
+						allTr[i].children[0].children[0].checked = true;
+					}
+				}else{
+					for(let i = 0; i < allTr.length; i++){
+						allTr[i].children[0].children[0].checked = false;
+					}
+				}
 			}
 			function delCartItem(cid){
 				$.ajax({

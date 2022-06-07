@@ -48,8 +48,6 @@ public class UserController extends BaseController{
         User user = service.login(username, password);
         session.setAttribute("uid", user.getUid());
         session.setAttribute("username", user.getUsername());
-        System.out.println(getUidFromSession(session));
-        System.out.println(getUsernameFromSession(session));
         //构造方法传递user对象的值及状态码
         return new JsonResult<>(OK,user);
     }
@@ -112,11 +110,12 @@ public class UserController extends BaseController{
             throw new FileTypeException("文件类型不匹配");
         }
         //在工程项目下创建upload目录，保存上传头像文件
-        String parent = session.getServletContext().getRealPath("upload");
+        String parent = "D:\\cStore\\src\\main\\resources\\static\\upload";
         File dir = new File(parent);
         if(!dir.exists()){
             dir.mkdir();
         }
+        System.out.println(dir.getPath());
         System.out.println(parent);
         //在parent目录下创建空文件，文件名为uuid加上传文件后缀名
         int index = file.getOriginalFilename().indexOf(".");

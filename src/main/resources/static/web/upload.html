@@ -14,6 +14,7 @@
 		<script src="../bootstrap3/jquery-1.9.1.min.js"></script>
 		<script src="../bootstrap3/js/bootstrap.js"></script>
 		<script src="../bootstrap3/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js"></script>
 		<!-- 字体图标 -->
 		<link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -55,7 +56,7 @@
 							</div>
 						</li>
 						<li class="li-split">|</li>
-						<li><a href="login.html"><span class="fa fa-user"></span>&nbsp;登录</a></li>
+						<li><a id="login-user" href="login.html"><span class="fa fa-user"></span>&nbsp;登录</a></li>
 					</ul>
 				</div>
 			</div>
@@ -244,8 +245,7 @@
 		</footer>
 		<script type="text/javascript">
 			$(document).ready(function (){
-				console.log($.cookie("avatar"))
-				$("#img-avatar").attr("src", $.cookie("avatar"))
+				document.getElementById("img-avatar").src = $.cookie("avatar");
 			});
 			$("#update-avatar-button").click(function () {
 				$.ajax({
@@ -258,7 +258,7 @@
 					success: function (json) {
 						if(json.state == 200){
 							$("#img-avatar").attr("src", json.data)
-							$.cookie("avatar", json.data, {expires: 7})
+							$.cookie("avatar", json.data, {expires: 7})//cookie值更新为新头像的路径,并设置cookie的过期时间
 							alert("修改成功")
 						}else {
 							alert("修改失败: "+json.message)
