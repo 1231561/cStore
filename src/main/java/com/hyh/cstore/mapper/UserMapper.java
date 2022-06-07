@@ -1,10 +1,12 @@
 package com.hyh.cstore.mapper;
 
 import com.hyh.cstore.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 
+@Mapper
 public interface UserMapper {
     /**
      * 插入用户
