@@ -108,10 +108,13 @@ public class CartServiceImpl implements ICartService {
         if(!cart.getUid().equals(uid)){
             throw new AccessDeniedException("非法访问的数据");
         }
+        if(cart.getNum() == 1){
+            return 1;
+        }
         Integer num = cart.getNum() - 1;
         Integer integer = cartMapper.updateNumByCid(num, cid, username, new Date());
         if(integer != 1){
-            throw new UpdateException("删除商品失败");
+            throw new UpdateException("减少商品数量失败");
         }
         return num;
     }
