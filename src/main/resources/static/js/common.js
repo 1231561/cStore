@@ -7,7 +7,6 @@ $(function (){
             success: function (json){
                 if (json.state == 200){
                     let a = document.getElementById("login-user");
-                    a.append("注销");
                     a.innerText = "HI "+json.data.username;
                     a.href = "userdata.html";
 

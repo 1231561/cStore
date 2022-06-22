@@ -10,6 +10,7 @@ import com.hyh.cstore.entity.Product;
 import com.hyh.cstore.ex.DeleteException;
 import com.hyh.cstore.ex.InsertException;
 import com.hyh.cstore.ex.OrderItemNotFoundException;
+import com.hyh.cstore.ex.OrderNotFoundException;
 import com.hyh.cstore.mapper.OrderMapper;
 import com.hyh.cstore.mapper.ProductMapper;
 import com.hyh.cstore.vo.CartVO;
@@ -132,6 +133,15 @@ public class OrderServiceImpl implements IOrderService {
         if(integer != 1){
             throw new DeleteException("删除失败");
         }
+    }
+
+    @Override
+    public Order findOrderByLast(Integer uid) {
+        Order orderByLast = orderMapper.findOrderByLast(uid);
+        if(orderByLast == null){
+            throw new OrderNotFoundException("该订单不存在");
+        }
+        return orderByLast;
     }
 
 }

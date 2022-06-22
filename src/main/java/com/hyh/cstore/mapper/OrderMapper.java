@@ -19,5 +19,5 @@ public interface OrderMapper {
 
     OrderItem findOrderItemById(Integer id);
 
-
+    Order findOrderByLast(Integer uid);
 }

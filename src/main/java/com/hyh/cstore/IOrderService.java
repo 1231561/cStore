@@ -14,5 +14,6 @@ public interface IOrderService {
 
     void deleteOrderItemById(Integer id);
 
+    Order findOrderByLast(Integer uid);
 
 }

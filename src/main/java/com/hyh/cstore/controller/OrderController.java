@@ -35,4 +35,11 @@ public class OrderController extends BaseController{
         orderService.deleteOrderItemById(id);
         return new JsonResult<>(OK);
     }
+    @RequestMapping("showOrder")
+    public JsonResult<Order> showOrder(HttpSession session){
+        System.out.println("很好");
+        Integer uid = getUidFromSession(session);
+        Order orderByLast = orderService.findOrderByLast(uid);
+        return new JsonResult<>(OK,orderByLast);
+    }
 }

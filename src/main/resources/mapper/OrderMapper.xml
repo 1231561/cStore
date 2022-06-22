@@ -9,6 +9,12 @@
         <result column="order_time" property="orderTime"/>
         <result column="recv_name" property="recvName"/>
     </resultMap>
+
+    <resultMap id="orderMap" type="com.hyh.cstore.entity.Order">
+        <id property="oid" column="oid"/>
+        <result column="recv_name" property="recvName"/>
+        <result column="total_price" property="totalPrice"/>
+    </resultMap>
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="oid">
     INSERT INTO store.t_order (
     uid, recv_name, recv_phone, recv_province, recv_city, recv_area, recv_address, total_price, status, order_time, pay_time, created_user, created_time, modified_user, modified_time )
@@ -38,5 +44,12 @@
     </delete>
     <select id="findOrderItemById" resultType="com.hyh.cstore.entity.OrderItem">
         SELECT * FROM store.t_order_item WHERE id=#{id}
+    </select>
+
+    <select id="findOrderByLast" resultMap="orderMap">
+        SELECT * FROM store.t_order
+        WHERE uid=#{uid}
+        ORDER BY t_order.created_time DESC
+        LIMIT 0,1
     </select>
 </mapper>
